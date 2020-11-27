@@ -15,8 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="imu_ekf.cpp">
+    <ClCompile Include="AHRSEKF2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SensorData.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AHRSEKF2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SensorData.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Converter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
