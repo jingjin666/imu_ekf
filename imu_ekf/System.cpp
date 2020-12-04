@@ -132,7 +132,8 @@ int System::RunEKF2()
 		//std::cout << "-----euler:"  << sensordatanormk.EulerGroundTruth.Roll << " " << sensordatanormk.EulerGroundTruth.Pitch << " "  << sensordatanormk.EulerGroundTruth.Yaw << std::endl; 
 
 		//printf("%f,%f\n", euler[2], sensordatanormk.EulerGroundTruth.Roll);
-		fout << euler[2] << "," << sensordatanormk.EulerGroundTruth.Roll << endl;
+		//fout << euler[2] << "," << sensordatanormk.EulerGroundTruth.Roll << endl;
+		fout << euler[1] << "," << sensordatanormk.EulerGroundTruth.Pitch << endl;
 
         //更新协方差矩阵
 		Pk = (Eigen::MatrixXd::Identity(7, 7) - Kk * Hk) * Pk_;

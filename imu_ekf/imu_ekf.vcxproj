@@ -31,6 +31,9 @@
     <ClInclude Include="SensorData.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="session.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{75DEEEFE-2414-408F-8F2D-97230074B4BA}</ProjectGuid>

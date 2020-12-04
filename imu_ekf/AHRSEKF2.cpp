@@ -63,8 +63,14 @@ void AHRSEKF2::readSensorData()
 		sensordata.Mag.Y = atof(fields[7].c_str());
 		sensordata.Mag.Z = atof(fields[8].c_str());
 
-		double pitch = atan2f(sensordata.Acc.Y, sqrt(sensordata.Acc.X*sensordata.Acc.X + sensordata.Acc.Z*sensordata.Acc.Z));
-		double roll = -atan2f(sensordata.Acc.X, sqrt(sensordata.Acc.Y*sensordata.Acc.Y + sensordata.Acc.Z*sensordata.Acc.Z));
+		SensorData temp = sensordata;
+
+		double norm = std::sqrt(temp.Acc.X*temp.Acc.X + temp.Acc.Y*temp.Acc.Y + temp.Acc.Z*temp.Acc.Z);
+		temp.Acc.X /= norm;
+		temp.Acc.Y /= norm;
+		temp.Acc.Z /= norm;
+		double pitch = asinf(temp.Acc.X);
+		double roll = atan2f(temp.Acc.Y, temp.Acc.Z);
 
 		double r1 = -sensordata.Mag.Y*cosf(roll) + sensordata.Mag.Z*sinf(roll);
 		double r2 = sensordata.Mag.X*cosf(pitch) + sensordata.Mag.Y*sinf(pitch)*sinf(roll) + sensordata.Mag.Z*sinf(pitch)*cosf(roll);
@@ -157,12 +163,17 @@ SensorData AHRSEKF2::GetSensordatabyID(const long unsigned int &nId, bool flagno
 EulerAngle AHRSEKF2::InitializeEuler(const SensorData &sensordata)
 {
 	double pitch, roll, yaw;
+	SensorData temp = sensordata;
 
-	pitch = atan2f(sensordata.Acc.Y, sqrt(sensordata.Acc.X*sensordata.Acc.X + sensordata.Acc.Z*sensordata.Acc.Z));
-	roll = -atan2f(sensordata.Acc.X, sqrt(sensordata.Acc.Y*sensordata.Acc.Y + sensordata.Acc.Z*sensordata.Acc.Z));
+	double norm = std::sqrt(temp.Acc.X*temp.Acc.X + temp.Acc.Y*temp.Acc.Y + temp.Acc.Z*temp.Acc.Z);
+	temp.Acc.X /= norm;
+	temp.Acc.Y /= norm;
+	temp.Acc.Z /= norm;
+	pitch = asinf(temp.Acc.X);
+	roll = atan2f(temp.Acc.Y, temp.Acc.Z);
 
-	double r1 = -sensordata.Mag.Y*cos(roll) + sensordata.Mag.Z*sin(roll);
-	double r2 = sensordata.Mag.X*cos(pitch) + sensordata.Mag.Y*sin(pitch)*sin(roll) + sensordata.Mag.Z*sin(pitch)*cos(roll);
+	double r1 = -temp.Mag.Y*cos(roll) + temp.Mag.Z*sin(roll);
+	double r2 = temp.Mag.X*cos(pitch) + temp.Mag.Y*sin(pitch)*sin(roll) + temp.Mag.Z*sin(pitch)*cos(roll);
 
 	yaw = atan2(r1, r2) - 8.3 * DEG_RAD;
 
@@ -173,7 +184,7 @@ EulerAngle AHRSEKF2::InitializeEuler(const SensorData &sensordata)
 void AHRSEKF2::InitializeVarMatrix(Eigen::Matrix<double, 7, 7> &Q, Eigen::Matrix<double, 3, 3> &R)
 {
     //过程噪声
-	const double w_process_noise_var = 0.01;  // rot vel var 
+	const double w_process_noise_var = 0.0001;  // rot vel var 
 	const double wb_process_noise_var = 0.003; // gyro bias change var
 
     //测量噪声
